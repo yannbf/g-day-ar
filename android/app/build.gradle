@@ -212,8 +212,6 @@ dependencies {
     implementation 'com.amazonaws:aws-android-sdk-cognito:2.7.7'
     implementation 'com.amazonaws:aws-android-sdk-cognitoidentityprovider:2.7.7'
 
-     }
-
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
