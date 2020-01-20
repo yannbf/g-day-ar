@@ -1,7 +1,4 @@
 PODS:
-  - AWSCore (2.6.7)
-  - AWSDynamoDB (2.6.7):
-    - AWSCore (= 2.6.7)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.61.5)
@@ -231,7 +228,6 @@ PODS:
   - RNDeviceInfo (5.4.1):
     - React
   - ViroKit (1.0):
-    - AWSDynamoDB (= 2.6.7)
     - GVRAudioSDK (= 1.120.0)
     - GVRSDK (= 1.120.0)
   - ViroReact (1.0)
@@ -272,8 +268,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AWSCore
-    - AWSDynamoDB
     - boost-for-react-native
     - GoogleToolboxForMac
     - GTMSessionFetcher
@@ -339,8 +333,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  AWSCore: a5ff5fb202342b922eb9036af9ecc3bc28a032eb
-  AWSDynamoDB: ea3631a84c0c4a19ef4cb4ec32d3348d3ae9d47c
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
   FBLazyVector: aaeaf388755e4f29cd74acbc9e3b8da6d807c37f
@@ -371,7 +363,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   RNDeviceInfo: 0e40d9a9031252d2525d8b69a4b3fa8689efcea4
-  ViroKit: a0c2268a9f6fc661defc37767e92cea2a1947e38
+  ViroKit: b3c0e0d4a40c2e78d31bb09740a49cd8bf6bd68f
   ViroReact: 7ec32276dcd1883662b4587eaedfff67f7fc3625
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
