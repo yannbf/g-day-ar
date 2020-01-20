@@ -14,6 +14,7 @@
     "ws": "^7.2.1"
   },
   "devDependencies": {
+    "@types/ip": "^1.1.0",
     "@types/node": "^13.1.7",
     "@types/ws": "^7.2.0",
     "ts-node-dev": "^1.0.0-pre.44",
