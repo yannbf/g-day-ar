@@ -9,11 +9,9 @@ export default () => {
   useEffect(() => {
     console.log('useEffect');
     wsPromise.then(ws => {
-      console.log('wsPromise');
       wsInstance.current = ws;
       ws.onmessage = function incoming(msg) {
         const data = JSON.parse(msg.data);
-        console.log({data});
         setData(data.message);
       };
     });

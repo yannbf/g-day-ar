@@ -27,7 +27,7 @@ function broadcast(ws: any, msg: {id: string}) {
     console.log("foo", { clients: wss.clients });
     wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
-            client.send(createServerMessage(`received a msg from ${msg.id}`));
+            client.send(createServerMessage(msg));
         }
     });
 }
