@@ -1,0 +1,22 @@
+{
+  "name": "ar-ws-server",
+  "version": "0.0.1",
+  "description": "a very simple ws server for courdination between multiple RN clients on a Wifi network",
+  "main": "server.js",
+  "scripts": {
+    "dev": "npx tsnd --respawn --clear server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ip": "^1.1.5",
+    "ws": "^7.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.7",
+    "@types/ws": "^7.2.0",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.7.5"
+  }
+}
