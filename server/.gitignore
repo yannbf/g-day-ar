@@ -2,11 +2,6 @@
 #
 .DS_Store
 
-# /IntelliJ
-#
-
-.idea
-
 # Visual Studio Code
 #
 .vscode/
@@ -16,3 +11,4 @@
 node_modules/
 npm-debug.log
 yarn-error.log
+
