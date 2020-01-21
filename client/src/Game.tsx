@@ -60,12 +60,12 @@ const Game: React.FC = () => {
       {gameStarted &&
         Object.entries(data).map(([key, value], index) => {
           if ((key as string).includes('player')) {
-            const {score, done} = value;
+            const {score, done, deviceName} = value;
             return (
               <ViroText
                 key={index}
                 width={1}
-                text={`${key}: ${score}`}
+                text={`${deviceName || key}: ${score}`}
                 scale={[0.5, 0.5, 0.5]}
                 position={[-1, -0.5 * index, -3]}
                 style={[

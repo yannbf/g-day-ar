@@ -8,6 +8,7 @@ console.log(`The host IP is: ${ip.address()}`);
 type PlayerStat = {
     score: number;
     done: boolean;
+    deviceName: string;
 }
 
 type GameState = {
@@ -62,6 +63,7 @@ function update(msg: any) {
     }
   if (msg.hit) {
       (gameState[msg.player] as PlayerStat).score += 1;
+      (gameState[msg.player] as PlayerStat).deviceName = msg.deviceName;
   }
   if (msg.done) {
       (gameState[msg.player] as PlayerStat).done = true;
