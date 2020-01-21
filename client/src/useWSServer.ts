@@ -18,7 +18,7 @@ export default () => {
   }, []);
   const sendMessage = useCallback(
     (data: {[key: string]: any}) =>
-      wsInstance.current && wsInstance.current.send(JSON.stringify(data)),
+      wsInstance?.current && wsInstance.current.send(JSON.stringify(data)),
     [wsInstance],
   );
 

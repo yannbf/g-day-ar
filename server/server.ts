@@ -5,29 +5,44 @@ const wss = new WebSocket.Server({ port: 8080 });
 console.log((wss.address() as AddressInfo).port);
 console.log(`The host IP is: ${ip.address()}`);
 
-const PLAYERS = new Map();
+type PlayerStat = {
+    score: number;
+    done: boolean;
+}
+
+type GameState = {
+    [key: string]: PlayerStat | boolean;
+};
+
+const gameState: GameState = {  };
 let count = 1;
 
 wss.on("connection", (ws: WebSocket) => {
     const player = `player ${count++}`;
-    PLAYERS.set(ws, player);
+    gameState[player] = {
+        score: 0,
+        done: false
+    };
+    ws.send(createServerMessage({ player }));
     console.log(`${player} connected`);
     ws.on("message", (data: string) => {
         const msg = JSON.parse(data);
         console.log("received: %s", msg);
-        broadcast(ws, msg);
+        update(msg);
+        broadcast(ws, gameState);
     });
 
     ws.on("close", () => {
         console.log(`${player} disconnected`);
+        delete gameState[player];
+        count--;
     });
 });
 
-function broadcast(ws: any, msg: {id: string}) {
-    console.log("foo", { clients: wss.clients });
+function broadcast(ws: any, data: any) {
     wss.clients.forEach(function each(client) {
         if (client.readyState === WebSocket.OPEN) {
-            client.send(createServerMessage(msg));
+            client.send(createServerMessage(data));
         }
     });
 }
@@ -38,4 +53,16 @@ function createServerMessage(message: any) {
         deviceName: `${ip.address()}`,
         message
     });
+}
+
+function update(msg: any) {
+    if (msg.gameStarted) {
+        gameState.gameStarted = true;
+    }
+  if (msg.hit) {
+      (gameState[msg.player] as PlayerStat).score += 1;
+  }
+  if (msg.done) {
+      (gameState[msg.player] as PlayerStat).done = true;
+  }
 }
