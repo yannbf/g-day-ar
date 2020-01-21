@@ -10,6 +10,8 @@ import {
 import useWSServer from './useWSServer';
 import {StyleSheet} from 'react-native';
 
+const initialPosition = [Math.random() * 0.1, -1.5, -2];
+
 const Game: React.FC = () => {
   const {sendMessage, data} = useWSServer();
   const [gameStarted, setGameStarted] = useState(false);
@@ -55,6 +57,31 @@ const Game: React.FC = () => {
         />
       )}
 
+      {gameStarted &&
+        Object.entries(data).map(([key, value], index) => {
+          if ((key as string).includes('player')) {
+            const {score, done} = value;
+            return (
+              <ViroText
+                key={index}
+                width={1}
+                text={`${key}: ${score}`}
+                scale={[0.5, 0.5, 0.5]}
+                position={[-1, -0.5 * index, -3]}
+                style={[
+                  styles.helloWorldTextStyle,
+                  {color: done ? 'red' : 'white'},
+                ]}
+                onClick={() => {
+                  sendMessage({
+                    gameStarted: true,
+                  });
+                }}
+              />
+            );
+          }
+          return null;
+        })}
       {!gameStarted && (
         <ViroText
           text="Start game"
@@ -86,7 +113,7 @@ const Game: React.FC = () => {
         height={0.1}
         length={0.3}
         width={0.3}
-        position={[0, -1.5, -2]}
+        position={initialPosition}
         // scale={[0.1, 0.1, 0.1]}
         materials={['green']}
         // rotation={[-10, 0, 0]}
@@ -143,7 +170,6 @@ const styles = StyleSheet.create({
   helloWorldTextStyle: {
     fontFamily: 'Arial',
     fontSize: 30,
-    color: '#ffffff',
     textAlignVertical: 'center',
     textAlign: 'center',
   },

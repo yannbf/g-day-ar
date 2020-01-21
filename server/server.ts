@@ -15,10 +15,10 @@ type GameState = {
 };
 
 const gameState: GameState = {  };
-let count = 1;
+let playersCount = 0;
 
 wss.on("connection", (ws: WebSocket) => {
-    const player = `player ${count++}`;
+    const player = `player ${++playersCount}`;
     gameState[player] = {
         score: 0,
         done: false
@@ -29,13 +29,14 @@ wss.on("connection", (ws: WebSocket) => {
         const msg = JSON.parse(data);
         console.log("received: %s", msg);
         update(msg);
+        console.log('---> gameState ', gameState);
         broadcast(ws, gameState);
     });
 
     ws.on("close", () => {
         console.log(`${player} disconnected`);
         delete gameState[player];
-        count--;
+        playersCount--;
     });
 });
 
@@ -64,5 +65,9 @@ function update(msg: any) {
   }
   if (msg.done) {
       (gameState[msg.player] as PlayerStat).done = true;
+      playersCount--;
+      if (playersCount === 0) {
+          gameState.done = true;
+      }
   }
 }
