@@ -1,9 +1,10 @@
 import {useEffect, useRef, useState, useCallback} from 'react';
 import {setupWebSocket} from './WebSocketController';
+import {GameState} from '../../server/server';
 const wsPromise = setupWebSocket();
 
 export default () => {
-  const [data, setData] = useState(null);
+  const [gameState, setGameState] = useState<null | GameState>(null);
   const wsInstance = useRef<null | WebSocket>(null);
 
   useEffect(() => {
@@ -12,7 +13,7 @@ export default () => {
       wsInstance.current = ws;
       ws.onmessage = function incoming(msg) {
         const data = JSON.parse(msg.data);
-        setData(data.message);
+        setGameState(data.message);
       };
     });
   }, []);
@@ -23,7 +24,7 @@ export default () => {
   );
 
   return {
-    data,
+    gameState,
     sendMessage,
   };
 };
