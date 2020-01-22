@@ -9,45 +9,27 @@ import {
 } from 'react-viro';
 import useWSServer from './useWSServer';
 import {StyleSheet} from 'react-native';
+import {getDeviceDetails} from './WebSocketController';
 
 const initialPosition = [Math.random() * 0.1, -1.5, -2];
 
 const Game: React.FC = () => {
-  const {sendMessage, data} = useWSServer();
-  const [gameStarted, setGameStarted] = useState(false);
+  const {sendMessage, gameState} = useWSServer();
   const [playerName, setPlayerName] = useState('');
   const sphereInstance = useRef(null);
   useEffect(() => {
-    if (data && data.gameStarted) {
-      setGameStarted(true);
-    }
-    if (data && data.player) {
-      setPlayerName(data.player);
-    }
-  }, [data]);
+    getDeviceDetails().then(details => setPlayerName(details.deviceName));
+  }, []);
 
   return (
     <ViroARScene>
       <ViroAmbientLight color="#aaaaaa" />
-
-      {gameStarted && (
+      {gameState?.started && !gameState?.done && (
         <ViroSphere
           viroTag="ball"
+          radius={0.15}
           ref={sphereInstance}
-          // dragType="FixedToWorld"
-          id="ball"
-          // onDrag={cords => {
-          //   console.log('---> cords ', cords);
-          //   //
-          // }}
-          // onTransformUpdate={(cords) => {
-          //   sendMessage({...(data ? data : {}), ballCords: cords});
-          // }}
-          height={1}
-          length={1}
-          width={1}
           position={[0, 1.5, -2]}
-          scale={[0.3, 0.3, 0.3]}
           materials={['red']}
           physicsBody={{
             type: 'Dynamic',
@@ -57,37 +39,50 @@ const Game: React.FC = () => {
         />
       )}
 
-      {gameStarted &&
-        Object.entries(data).map(([key, value], index) => {
-          if ((key as string).includes('player')) {
+      {gameState?.started && ( // scores
+        <>
+          <ViroText
+            width={1}
+            text="Score:"
+            position={[-1, 0.3, -3]}
+            style={styles.text}
+          />
+          {Object.entries(gameState?.players || {}).map(([key, value], index) => {
             const {score, done, deviceName} = value;
             return (
               <ViroText
                 key={index}
                 width={1}
                 text={`${deviceName || key}: ${score}`}
-                scale={[0.5, 0.5, 0.5]}
+                // scale={[0.5, 0.5, 0.5]}
                 position={[-1, -0.5 * index, -3]}
-                style={[
-                  styles.helloWorldTextStyle,
-                  {color: done ? 'red' : 'white'},
-                ]}
-                onClick={() => {
-                  sendMessage({
-                    gameStarted: true,
-                  });
-                }}
+                style={[styles.text, {color: done ? 'red' : 'white'}]}
               />
             );
-          }
-          return null;
-        })}
-      {!gameStarted && (
+          })}
+        </>
+      )}
+
+      {!gameState?.started && !gameState?.players[playerName] && (
+        <ViroText
+          text="Connect"
+          // scale={[0.5, 0.5, 0.5]}
+          position={[0, 0, -1]}
+          style={styles.text}
+          onClick={() => {
+            sendMessage({
+              connect: true,
+              deviceName: playerName,
+            });
+          }}
+        />
+      )}
+
+      {!gameState?.started && !!Object.keys(gameState?.players || {}).length && (
         <ViroText
           text="Start game"
-          scale={[0.5, 0.5, 0.5]}
           position={[0, 0, -1]}
-          style={styles.helloWorldTextStyle}
+          style={styles.text}
           onClick={() => {
             sendMessage({
               gameStarted: true,
@@ -96,6 +91,18 @@ const Game: React.FC = () => {
         />
       )}
 
+      {gameState?.done && (
+        <ViroText
+          text="Restart"
+          position={[0, 0.2, -1]}
+          style={styles.text}
+          onClick={() => {
+            sendMessage({
+              restart: true,
+            });
+          }}
+        />
+      )}
       <ViroBox
         dragType="FixedToPlane"
         dragPlane={{
@@ -114,9 +121,7 @@ const Game: React.FC = () => {
         length={0.3}
         width={0.3}
         position={initialPosition}
-        // scale={[0.1, 0.1, 0.1]}
         materials={['green']}
-        // rotation={[-10, 0, 0]}
         physicsBody={{
           type: 'Static',
           restitution: 1,
@@ -128,7 +133,7 @@ const Game: React.FC = () => {
       />
 
       <ViroBox
-        id="ground"
+        viroTag="ground"
         onCollision={() => {
           sendMessage({
             player: playerName,
@@ -139,7 +144,6 @@ const Game: React.FC = () => {
         length={50}
         width={50}
         position={[0, -2, -2.5]}
-        // scale={[0.1, 0.1, 0.1]}
         materials={['black']}
         physicsBody={{
           type: 'Static',
@@ -167,9 +171,9 @@ ViroMaterials.createMaterials({
 });
 
 const styles = StyleSheet.create({
-  helloWorldTextStyle: {
+  text: {
     fontFamily: 'Arial',
-    fontSize: 30,
+    fontSize: 20,
     textAlignVertical: 'center',
     textAlign: 'center',
   },
