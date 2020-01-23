@@ -21,21 +21,34 @@ export type GameAction = {
 
 export const GameStateContext = React.createContext<GameContextType>(null);
 
+const inRange = (box1: BoxType, box2X: number) => {
+  const box1Left = box1.position[0];
+  const box1Right = box1.position[0] + box1.dimensions[0];
+  const isInRange = box2X >= box1Left && box2X <= box1Right;
+
+  console.log({ box1Left, box1Right, box2X, isInRange });
+
+  return isInRange;
+};
+
 const reducer: React.Reducer<GameState, GameAction> = (state, action) => {
   switch (action.type) {
     case 'tap':
       const currentX = action.payload.currentX * -1;
-      const {currentBox, stack} = state;
+      const {currentBox, stack, isPlaying} = state;
       const previousBox = {...currentBox};
       const newPositions = [
         currentX,
         currentBox.position[1] + currentBox.dimensions[1],
         currentBox.position[2],
       ];
+      const topBox = stack[stack.length - 1];
+      const isInRange = inRange(topBox, currentX);
 
       return {
         ...state,
         score: state.score + 1,
+        isPlaying: isInRange,
         currentBox: {
           ...currentBox,
           position: newPositions,

@@ -1,5 +1,11 @@
 import React from 'react';
-import {ViroARScene, ViroAmbientLight, ViroMaterials, ViroAnimations} from 'react-viro';
+import {View, Text} from 'react-native';
+import {
+  ViroARScene,
+  ViroAmbientLight,
+  ViroMaterials,
+  ViroText,
+} from 'react-viro';
 import {StyleSheet} from 'react-native';
 import {Box, MovingBox} from './components/Box';
 import {Point3D} from './types';
@@ -18,7 +24,7 @@ const initialState: GameState = {
   ],
   currentBox: {
     dimensions: baseDimensions,
-    position: [0, -0.10, -1],
+    position: [0, -0.1, -1],
   },
 };
 
@@ -30,23 +36,33 @@ export const GameContainer: React.FC = () => {
   );
 };
 
-
 export const Game: React.FC = () => {
   const {state, dispatch} = useGameState();
   const {stack, currentBox} = state;
-  const [currentX, setCurrentPosition] = React.useState(state.currentBox.position[0]);
+  const [currentX, setCurrentPosition] = React.useState(
+    state.currentBox.position[0],
+  );
 
   return (
     <ViroARScene
       onClick={() => {
-        dispatch({type: 'tap', payload: { currentX: currentX }});
+        dispatch({type: 'tap', payload: {currentX: currentX}});
       }}>
+      <ViroText
+        width={1}
+        text={`Score:${state.score}`}
+        position={[-1, 0.3, -3]}
+        style={styles.text}
+      />
       <ViroAmbientLight color="#aaaaaa" />
-      <MovingBox {...currentBox} onTransformUpdate={(position) => {
-        setTimeout(() => {
-          setCurrentPosition(position[0]);
-        }, 100);
-      }}/>
+      <MovingBox
+        {...currentBox}
+        onTransformUpdate={position => {
+          setTimeout(() => {
+            setCurrentPosition(position[0]);
+          }, 100);
+        }}
+      />
       {stack.map(box => (
         <Box dimensions={box.dimensions} position={box.position} />
       ))}

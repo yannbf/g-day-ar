@@ -8,12 +8,6 @@ export const Box: React.FC<BoxType> = ({
 }) => {
   return (
     <ViroBox
-      dragType="FixedToPlane"
-      dragPlane={{
-        planePoint: [0, -1.5, 0],
-        planeNormal: [0, 1, 0],
-        maxDistance: 10,
-      }}
       width={dimensions[0]}
       height={dimensions[1]}
       length={dimensions[2]}
@@ -37,12 +31,6 @@ export const MovingBox: React.FC<BoxType> = ({dimensions, position, onTransformU
 
   return (
     <ViroBox
-      dragType="FixedToPlane"
-      dragPlane={{
-        planePoint: [0, -1.5, 0],
-        planeNormal: [0, 1, 0],
-        maxDistance: 10,
-      }}
       onTransformUpdate={onTransformUpdate}
       width={dimensions[0]}
       height={dimensions[1]}
