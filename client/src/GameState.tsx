@@ -13,14 +13,14 @@ export type GameContextType = {
 };
 
 export type GameAction = {
-  type: 'increment';
+  type: 'tap';
 };
 
 export const GameStateContext = React.createContext<GameContextType>(null);
 
 const reducer: React.Reducer<GameState, GameAction> = (state, action) => {
   switch (action.type) {
-    case 'increment':
+    case 'tap':
       return {
         ...state,
         score: state.score + 1,

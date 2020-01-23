@@ -17,12 +17,14 @@ export const Box: React.FC<BoxType> = ({dimensions, position}) => {
       position={position}
       materials={['green']}
       physicsBody={{
-        type: 'Static',
+        type: 'Dynamic',
+        mass: 0,
         restitution: 1,
         shape: {
-          type: 'Sphere',
-          params: [0.3],
+          type: 'Box',
+          params: dimensions,
         },
+        force: {value: [10, 0, 0]},
       }}
     />
   );

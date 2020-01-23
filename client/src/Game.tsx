@@ -24,10 +24,21 @@ const initialState: GameState = {
 
 export const GameContainer: React.FC = () => {
   return (
-    <ViroARScene>
-      <GameStateProvider initialState={initialState}>
-        <Game />
-      </GameStateProvider>
+    <GameStateProvider initialState={initialState}>
+      <GameScene />
+    </GameStateProvider>
+  );
+};
+
+export const GameScene: React.FC = ({}) => {
+  const {state, dispatch} = useGameState();
+  return (
+    <ViroARScene
+      onClick={() => {
+        console.log('clickjed');
+        dispatch({type: 'tap'});
+      }}>
+      <Game />
     </ViroARScene>
   );
 };
