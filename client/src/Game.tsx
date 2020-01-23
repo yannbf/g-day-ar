@@ -1,23 +1,46 @@
 import React from 'react';
-import {
-  ViroARScene,
-  ViroAmbientLight,
-  ViroMaterials,
-} from 'react-viro';
+import {ViroARScene, ViroAmbientLight, ViroMaterials} from 'react-viro';
 import {StyleSheet} from 'react-native';
-import { Box } from './components/Box';
-import { Point3D } from './types';
+import {Box} from './components/Box';
+import {Point3D} from './types';
+import {GameStateProvider, GameState, useGameState} from './GameState';
 
-const initialPosition: Point3D = [0, -0.5, -1];
 const baseDimensions: Point3D = [0.2, 0.05, 0.15];
 
-const Game: React.FC = () => {
+const initialState: GameState = {
+  score: 0,
+  isPlaying: false,
+  stack: [
+    {
+      dimensions: baseDimensions,
+      position: [0, -0.5, -1],
+    },
+    {
+      dimensions: baseDimensions,
+      position: [0.1, -0.45, -1],
+    },
+  ],
+};
+
+export const GameContainer: React.FC = () => {
   return (
     <ViroARScene>
-      <ViroAmbientLight color="#aaaaaa" />
-      <Box dimensions={baseDimensions} position={[0, -0.5, -1]} />
-      <Box dimensions={baseDimensions} position={[0.1, -0.45, -1]} />
+      <GameStateProvider initialState={initialState}>
+        <Game />
+      </GameStateProvider>
     </ViroARScene>
+  );
+};
+
+export const Game: React.FC = () => {
+  const {state, dispatch} = useGameState();
+  return (
+    <>
+      <ViroAmbientLight color="#aaaaaa" />
+      {state.stack.map(box => (
+        <Box dimensions={box.dimensions} position={box.position} />
+      ))}
+    </>
   );
 };
 
@@ -45,5 +68,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
-export default Game;

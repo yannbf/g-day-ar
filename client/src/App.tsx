@@ -1,12 +1,16 @@
 import React from 'react';
 import {ViroARSceneNavigator} from 'react-viro';
-import Game from './Game';
+import {GameContainer} from './Game';
 
 declare var global: {HermesInternal: null | {}};
 
 const App = () => {
   return (
-    <ViroARSceneNavigator initialScene={{scene: Game}} autofocus hdrEnabled />
+    <ViroARSceneNavigator
+      initialScene={{scene: GameContainer}}
+      autofocus
+      hdrEnabled
+    />
   );
 };
 
