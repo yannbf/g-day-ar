@@ -1,7 +1,7 @@
 import React from 'react';
 import {ViroARScene, ViroAmbientLight, ViroMaterials, ViroAnimations} from 'react-viro';
 import {StyleSheet} from 'react-native';
-import {Box, MovingBox, BoundaryBox} from './components/Box';
+import {Box, MovingBox} from './components/Box';
 import {Point3D} from './types';
 import {GameStateProvider, GameState, useGameState} from './GameState';
 
@@ -25,36 +25,32 @@ const initialState: GameState = {
 export const GameContainer: React.FC = () => {
   return (
     <GameStateProvider initialState={initialState}>
-      <GameScene />
+      <Game />
     </GameStateProvider>
   );
 };
 
-export const GameScene: React.FC = ({}) => {
-  const {state, dispatch} = useGameState();
-  return (
-    <ViroARScene
-      onClick={() => {
-        console.log('clickjed');
-        dispatch({type: 'tap'});
-      }}>
-      <Game />
-    </ViroARScene>
-  );
-};
 
 export const Game: React.FC = () => {
   const {state, dispatch} = useGameState();
   const {stack, currentBox} = state;
+  const [currentX, setCurrentPosition] = React.useState(state.currentBox.position[0]);
 
   return (
-    <>
+    <ViroARScene
+      onClick={() => {
+        dispatch({type: 'tap', payload: { currentX: currentX }});
+      }}>
       <ViroAmbientLight color="#aaaaaa" />
-      <MovingBox {...currentBox}/>
+      <MovingBox {...currentBox} onTransformUpdate={(position) => {
+        setTimeout(() => {
+          setCurrentPosition(position[0]);
+        }, 100);
+      }}/>
       {stack.map(box => (
         <Box dimensions={box.dimensions} position={box.position} />
       ))}
-    </>
+    </ViroARScene>
   );
 };
 

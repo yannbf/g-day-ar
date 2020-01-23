@@ -5,7 +5,6 @@ import {BoxType} from '../types';
 export const Box: React.FC<BoxType> = ({
   dimensions,
   position,
-  onCollision,
 }) => {
   return (
     <ViroBox
@@ -15,7 +14,6 @@ export const Box: React.FC<BoxType> = ({
         planeNormal: [0, 1, 0],
         maxDistance: 10,
       }}
-      onCollision={onCollision}
       width={dimensions[0]}
       height={dimensions[1]}
       length={dimensions[2]}
@@ -28,7 +26,7 @@ export const Box: React.FC<BoxType> = ({
   );
 };
 
-export const MovingBox: React.FC<BoxType> = ({dimensions, position}) => {
+export const MovingBox: React.FC<BoxType> = ({dimensions, position, onTransformUpdate}) => {
   const [run, setRun] = useState(false);
 
   React.useEffect(() => {
@@ -45,6 +43,7 @@ export const MovingBox: React.FC<BoxType> = ({dimensions, position}) => {
         planeNormal: [0, 1, 0],
         maxDistance: 10,
       }}
+      onTransformUpdate={onTransformUpdate}
       width={dimensions[0]}
       height={dimensions[1]}
       length={dimensions[2]}
