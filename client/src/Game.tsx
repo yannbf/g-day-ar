@@ -1,7 +1,7 @@
 import React from 'react';
-import {ViroARScene, ViroAmbientLight, ViroMaterials} from 'react-viro';
+import {ViroARScene, ViroAmbientLight, ViroMaterials, ViroAnimations} from 'react-viro';
 import {StyleSheet} from 'react-native';
-import {Box} from './components/Box';
+import {Box, MovingBox, BoundaryBox} from './components/Box';
 import {Point3D} from './types';
 import {GameStateProvider, GameState, useGameState} from './GameState';
 
@@ -13,13 +13,13 @@ const initialState: GameState = {
   stack: [
     {
       dimensions: baseDimensions,
-      position: [0, -0.5, -1],
-    },
-    {
-      dimensions: baseDimensions,
-      position: [0.1, -0.45, -1],
+      position: [0, -0.15, -1],
     },
   ],
+  currentBox: {
+    dimensions: baseDimensions,
+    position: [0, -0.10, -1],
+  },
 };
 
 export const GameContainer: React.FC = () => {
@@ -45,10 +45,13 @@ export const GameScene: React.FC = ({}) => {
 
 export const Game: React.FC = () => {
   const {state, dispatch} = useGameState();
+  const {stack, currentBox} = state;
+
   return (
     <>
       <ViroAmbientLight color="#aaaaaa" />
-      {state.stack.map(box => (
+      <MovingBox {...currentBox}/>
+      {stack.map(box => (
         <Box dimensions={box.dimensions} position={box.position} />
       ))}
     </>

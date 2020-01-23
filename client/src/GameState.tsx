@@ -5,6 +5,7 @@ export type GameState = {
   score: number;
   isPlaying: boolean;
   stack: BoxType[];
+  currentBox: BoxType;
 };
 
 export type GameContextType = {
