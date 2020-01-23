@@ -2,43 +2,21 @@ import React from 'react';
 import {
   ViroARScene,
   ViroAmbientLight,
-  ViroBox,
   ViroMaterials,
 } from 'react-viro';
 import {StyleSheet} from 'react-native';
+import { Box } from './components/Box';
+import { Point3D } from './types';
 
-const initialPosition = [0, -0.5, -1];
-const baseDimensions = {
-  height: 0.1,
-  length: 0.3,
-  width: 0.3
-};
+const initialPosition: Point3D = [0, -0.5, -1];
+const baseDimensions: Point3D = [0.2, 0.05, 0.15];
 
 const Game: React.FC = () => {
-
   return (
     <ViroARScene>
       <ViroAmbientLight color="#aaaaaa" />
-      
-      <ViroBox
-        dragType="FixedToPlane"
-        dragPlane={{
-          planePoint: [0, -1.5, 0],
-          planeNormal: [0, 1, 0],
-          maxDistance: 10,
-        }}
-        {...baseDimensions}
-        position={initialPosition}
-        materials={['green']}
-        physicsBody={{
-          type: 'Static',
-          restitution: 1,
-          shape: {
-            type: 'Sphere',
-            params: [0.3],
-          },
-        }}
-      />
+      <Box dimensions={baseDimensions} position={[0, -0.5, -1]} />
+      <Box dimensions={baseDimensions} position={[0.1, -0.45, -1]} />
     </ViroARScene>
   );
 };
