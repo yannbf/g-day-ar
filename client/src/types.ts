@@ -4,4 +4,6 @@ export type BoxType = {
   position: Point3D;
   velocity?: number;
   onTransformUpdate?: Function;
+  color: string[];
+  isPlaying: Boolean;
 };

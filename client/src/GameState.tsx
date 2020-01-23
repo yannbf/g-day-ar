@@ -1,5 +1,6 @@
 import React from 'react';
 import {BoxType, Point3D} from './types';
+import { getRandomColor } from './Game';
 
 export type GameState = {
   score: number;
@@ -26,8 +27,6 @@ const inRange = (box1: BoxType, box2X: number) => {
   const box1Right = box1.position[0] + box1.dimensions[0];
   const isInRange = box2X >= box1Left && box2X <= box1Right;
 
-  console.log({ box1Left, box1Right, box2X, isInRange });
-
   return isInRange;
 };
 
@@ -48,9 +47,10 @@ const reducer: React.Reducer<GameState, GameAction> = (state, action) => {
       return {
         ...state,
         score: state.score + 1,
-        isPlaying: isInRange,
+        isPlaying: state.score < 8,
         currentBox: {
-          ...currentBox,
+          ...currentBox, 
+          color: getRandomColor(),
           position: newPositions,
         },
         stack: [...stack, previousBox],

@@ -2,9 +2,11 @@ import React, {useState} from 'react';
 import {ViroBox} from 'react-viro';
 import {BoxType} from '../types';
 
+
 export const Box: React.FC<BoxType> = ({
   dimensions,
   position,
+  color
 }) => {
   return (
     <ViroBox
@@ -12,7 +14,7 @@ export const Box: React.FC<BoxType> = ({
       height={dimensions[1]}
       length={dimensions[2]}
       position={position}
-      materials={['green']}
+      materials={color}
       physicsBody={{
         type: 'Static',
       }}
@@ -20,7 +22,7 @@ export const Box: React.FC<BoxType> = ({
   );
 };
 
-export const MovingBox: React.FC<BoxType> = ({dimensions, position, onTransformUpdate}) => {
+export const MovingBox: React.FC<BoxType> = ({dimensions, position, color, onTransformUpdate, isPlaying}) => {
   const [run, setRun] = useState(false);
 
   React.useEffect(() => {
@@ -36,14 +38,14 @@ export const MovingBox: React.FC<BoxType> = ({dimensions, position, onTransformU
       height={dimensions[1]}
       length={dimensions[2]}
       position={position}
-      materials={['green']}
+      materials={color}
       physicsBody={{
         type: 'Kinematic',
         mass: 0,
       }}
       animation={{
         name: 'spring',
-        run,
+        run: isPlaying ? run : false,
         loop: true
       }}
     />
